@@ -1,0 +1,9 @@
+build
+.git
+**/tmp
+**/tags
+*.swp
+*.bak
+*~
+*_dep
+_dep*
