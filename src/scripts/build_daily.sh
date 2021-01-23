@@ -53,14 +53,21 @@ function buildDaily
     local dest_file
     local header
 
-     for i in $(seq $mstart $mend)
-     do
+    if [ ! -d $BUILD_DIR ]
+    then
+      mkdir -p $BUILD_DIR
+    fi
+
+    for i in $(seq $mstart $mend)
+    do
+
       local dayList=()
       local header
       local day_num
       local month_num
       local week_num
 
+      ncal -bhwM3 -d ${year}-${i} > ~/tmp/cal_month.txt
       daysPerMonth $i $year dayList
       for j in $dayList
       do
@@ -76,15 +83,21 @@ function buildDaily
           -pointsize 24 \
           -draw "text 30,50 '$header'" \
           -draw "text 700,50 'KW $week_num'" \
+          -font FreeMono \
+          -fill black \
+          -pointsize 15 \
+          -draw "text 40, 990 '$(cat ~/tmp/cal_month.txt)'" \
           $src_file \
           $dest_file
         echo -n "."
       done
       echo -n "#"
-      convert $BUILD_DIR/${DAY_PLAN_TEMP}_${year}_${month_num}_*.png $BUILD_DIR/planner-daily-${year}-${month_num}.pdf
+      convert \
+        $BUILD_DIR/${DAY_PLAN_TEMP}_${year}_${month_num}_*.png \
+        $BUILD_DIR/planner-daily-${year}-${month_num}.pdf
       echo "done for $(echo $header |cut -d" " -f3)"
     done
-    echo "done all"
+  echo "done all"
 }
 
 buildDaily $1 $2 $3
