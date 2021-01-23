@@ -108,7 +108,7 @@ function build_weekly()
       convert  \
         -font helvetica \
         -fill black \
-        -pointsize 24 \
+        -pointsize 20 \
         -draw "text 20,50 '$header'" \
         -draw "text 700,50 '$kw'" \
         -draw "text 410,105 '$date_mon'" \
@@ -118,6 +118,10 @@ function build_weekly()
         -draw "text 410,705 '$date_fri'" \
         -draw "text 410,855 '$date_sat'" \
         -draw "text 410,1005 '$date_sun'" \
+        -font FreeMono \
+        -fill black \
+        -pointsize 17  \
+        -draw "text 60, 990 '$(ncal -bhwM -d ${year}-${month})'" \
         $src_file \
         $dest_file
 
