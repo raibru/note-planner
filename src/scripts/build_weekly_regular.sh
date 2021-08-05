@@ -119,10 +119,6 @@ function build_weekly()
         -draw "text 30,593 '$date_fri'" \
         -draw "text 30,683 '$date_sat'" \
         -draw "text 30,773 '$date_sun'" \
-        -font FreeMono \
-        -fill black \
-        -pointsize 17  \
-        -draw "text 70, 920 '$(ncal -bhwM -d ${year}-${month})'" \
         $src_file \
         $dest_file
 
@@ -130,7 +126,8 @@ function build_weekly()
 
     done
 
-    convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
+    # convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
+    gm convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
 
     echo "done"
 }
