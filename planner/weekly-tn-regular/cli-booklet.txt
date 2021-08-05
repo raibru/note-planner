@@ -1,0 +1,18 @@
+# 1st Step: generate planner as PDF
+gm convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
+# 2nd Step: generate booklet
+pdfbook2 --paper=a4paper --outer-margin=22 --inner-margin=17 -t 5 -b 5 planner-2021.pdf
+pdfjam --landscape --signature 56 planner-weekly-2021.pdf
+pdfjam --landscape --signature 56 --frame true --a4paper --nup 2x1 --papersize '{13cm,21cm}' planner-weekly-2021.pdf
+pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.95 --booklet true --delta '10mm 0mm' --frame true planner-weekly-2021.pdf
+pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --booklet true --delta '10mm 0mm' --frame true planner-weekly-2021.pdf
+pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --booklet true --delta '10mm 0mm' --suffix booklet planner-weekly-2021.pdf
+pdfjam --landscape --signature 8 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig8 planner-weekly-2021.pdf
+pdfjam --landscape --signature 16 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig16 planner-weekly-2021.pdf
+
+./build_weekly.sh 52 52 2020
+./build_weekly.sh 1 2 2022
+./build_weekly.sh 1 52 2021
+./build_yearly.sh 2021
+pdfbook2 --paper=a4paper --outer-margin=22 --inner-margin=17 -t 5 -b 5 planner-2021.pdf
+[print douple-side]
