@@ -126,8 +126,8 @@ function build_weekly()
 
     done
 
-    # convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
-    gm convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
+    #convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
+    #gm convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
 
     echo "done"
 }
