@@ -3,7 +3,7 @@
 # call: build_yearly.sh Year
 #
 
-YEAR_PLAN_TEMP=Planner-yearly-regular
+YEAR_PLAN_TEMP=Planner-Yearly-regular
 RES_DIR=../res
 BUILD_DIR=../../build
 
@@ -38,7 +38,8 @@ function build_yearly()
       $src_file \
       $dest_file
 
-      gm convert $BUILD_DIR/Planner*.png -density 72 -page a5 $BUILD_DIR/planner-$year.pdf
+      #gm convert $BUILD_DIR/Planner*.png -density 72 -page a5 $BUILD_DIR/planner-$year.pdf
+      #convert $BUILD_DIR/Planner*.png -density 72 -page a5 $BUILD_DIR/planner-$year.pdf
       echo -n "."
 
     echo "done"
