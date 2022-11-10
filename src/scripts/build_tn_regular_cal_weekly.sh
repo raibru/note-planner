@@ -218,11 +218,27 @@ function build_pdf()
   local year=$1
 
   echo "-- start building PDF..."
-  convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
-          -density 72 \
-          -page a5 \
-          $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
-  #gm convert $BUILD_DIR/${WEEK_PLAN_TEMP}_*.png -density 72 -page a5 $BUILD_DIR/planner-weekly-$year.pdf
+  #convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  #        -density 72 \
+  #        -page a5 \
+  #        $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
+  gm convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+             -density 72 \
+             -page a5 \
+             $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
+  echo "-- ...done"
+}
+
+function build_pdf_book()
+{
+  local year=$1
+
+  echo "-- start building PDF book..."
+  pdfbook2 --paper=a4paper \
+           --outer-margin=22 \
+           --inner-margin=17 \
+           -t 5 -b 5 \
+           $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
   echo "-- ...done"
 }
 
@@ -241,6 +257,7 @@ build_yearly $1 3
 build_empty_page $1 4
 build_weekly $1
 build_pdf $1
+build_pdf_book $1
 clean_build
 
 echo "- ...finished"
