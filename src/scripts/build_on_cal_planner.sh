@@ -284,38 +284,50 @@ function build_weekly()
 function build_daily()
 {
     local year=$1
-    local month=$2
-    local page_nr=$3
+    local month_start=$2
+    local month_end=$3
+    local page_nr=$4
 
     echo "-- start building daily pages..."
 
     local date_fmt="+%a %d. %B %Y"
     #local date_small_fmt="+%a %d"
-    local start_day=1
-    local end_day=$(date -d "$year-$month-01 +1 month -1 day" +%d)
-    local month_name=$(date -d "$year-$month-01" +%B)
 
-    echo -n "--- $month_name "
-    for i in $(seq 1 $end_day)
+    for month in $(seq $month_start $month_end)
     do
-      local day=$(date -d "$year-$month-$i" "$date_fmt")
-      local daynum=$(date -d "$year-$month-$i" "+%d")
-      local src_file=${RES_DIR}/$DAY_PLAN_TEMP.png
-      local dest_file=${BUILD_DIR}/Planner-${page_nr}-Daily_${year}${month}${daynum}.png
-      local month_print=${BUILD_DIR}/month_print.tmp
+      local start_day=1
+      local end_day=$(date -d "$year-$month-01 +1 month -1 day" +%d)
+      local month_name=$(date -d "$year-$month-01" +%B)
 
-      echo -n "[$i]"
-      header=$(echo "$day")
+      echo -n "--- $month_name "
 
-      #  -draw "text 710,50 '$year'" \
-      convert  \
-        -font helvetica \
-        -fill black \
-        -pointsize 24 \
-        -draw "text 20,50 '$header'" \
-        $src_file \
-        $dest_file
+      for i in $(seq 1 $end_day)
+      do
+        local day=$(date -d "$year-$month-$i" "$date_fmt")
+        local daynum=$(date -d "$year-$month-$i" "+%d")
+        local src_file=${RES_DIR}/$DAY_PLAN_TEMP.png
+        local dest_file=${BUILD_DIR}/Planner-${page_nr}-Daily_${year}${month}${daynum}.png
+        local month_print=${BUILD_DIR}/month_print.tmp
 
+        echo -n "[$i]"
+        header=$(echo "$day")
+
+        #  -draw "text 710,50 '$year'" \
+        convert  \
+          -font helvetica \
+          -fill black \
+          -pointsize 24 \
+          -draw "text 20,50 '$header'" \
+          -font FreeMono \
+          -fill black \
+          -pointsize 24  \
+          -draw "text 420, 120 '$(ncal -bhwM -d ${year}-${month} |tail -n +2)'" \
+          $src_file \
+          $dest_file
+
+      done
+
+      echo "[ok]"
     done
     echo "[ok]"
 
@@ -343,9 +355,9 @@ function build_pdf_book()
   local year=$1
 
   echo "-- start building PDF book..."
-  pdfbook2 --paper=a4paper \
-           --outer-margin=22 \
-           --inner-margin=17 \
+  pdfbook2 --paper=a2paper \
+           --outer-margin=15 \
+           --inner-margin=10 \
            -t 5 -b 5 \
            $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
   echo "-- ...done"
@@ -361,13 +373,13 @@ function clean_build()
 echo "- start building calender planner of $1"
 ## build for Year
 build_yearly_calendar $1 1
-#build_quartarly $1 2
+build_quartarly $1 2
 #build_empty_page $1 2
 #build_yearly $1 3
 #build_empty_page $1 4
-#build_weekly $1 3
-build_daily $1 2 4
-#build_pdf $1
+build_weekly $1 3
+build_daily $1 3 12 4
+build_pdf $1
 #build_pdf_book $1
 #clean_build
 
