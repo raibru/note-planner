@@ -264,6 +264,12 @@ function build_weekly()
         -pointsize 24 \
         -draw "text 20,40 '$header'" \
         -draw "text 380,40 '$kw'" \
+        -font FreeMono \
+        -fill black \
+        -pointsize 24  \
+        -draw "text 380, 100 '$(gcal -K -H no -s 1 ${month} ${year} |tail -n +3)'" \
+        -font helvetica \
+        -fill black \
         -pointsize 20 \
         -draw "text 900,300 '$date_mon'" \
         -draw "text 900,420 '$date_tue'" \
@@ -313,6 +319,7 @@ function build_daily()
         header=$(echo "$day")
 
         #  -draw "text 710,50 '$year'" \
+        #  -draw "text 420, 120 '$(ncal -bhwM -d ${year}-${month} |tail -n +2)'" \
         convert  \
           -font helvetica \
           -fill black \
@@ -321,7 +328,7 @@ function build_daily()
           -font FreeMono \
           -fill black \
           -pointsize 24  \
-          -draw "text 420, 120 '$(ncal -bhwM -d ${year}-${month} |tail -n +2)'" \
+          -draw "text 410, 110 '$(gcal -K -H no -s 1 ${month} ${year} |tail -n +3)'" \
           $src_file \
           $dest_file
 

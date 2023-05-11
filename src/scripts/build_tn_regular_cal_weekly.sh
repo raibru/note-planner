@@ -9,7 +9,7 @@
 # Requisites: ncal, tex {for: pdf, booklet}, imagemagik {for: convert}
 #
 
-YEAR_CAL_TEMP=Planner-Yearly-regular
+YEAR_CAL_TEMP=Planner-Yearly-TNRegular
 YEAR_PLAN_TEMP=Planner-YearlyHoriL-regular
 WEEK_PLAN_TEMP=Planner-Weekly-regular
 PLAN_TEMP_PATTERN=Planner-*.png
