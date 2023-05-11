@@ -258,8 +258,10 @@ function build_weekly()
 
       file_cnt=$((file_cnt + 1 ))
       ord=$(printf "%02d" $file_cnt)
-      local src_file=${RES_DIR}/$WEEK_PLAN_TEMP.png
-      local dest_file=${BUILD_DIR}/Planner-${page_nr}-${ord}-Weekly_${year}_${weeklead}.png
+      local src_file_left=${RES_DIR}/$WEEK_PLAN_DAYS_TEMP.png
+      local dest_file_left=${BUILD_DIR}/Planner-${page_nr}-${ord}-Weekly_${year}_${weeklead}_1.png
+      local src_file_right=${RES_DIR}/$WEEK_PLAN_NOTES_TEMP.png
+      local dest_file_right=${BUILD_DIR}/Planner-${page_nr}-${ord}-Weekly_${year}_${weeklead}_2.png
       local month_print=${BUILD_DIR}/month_print.tmp
 
       #printf "%s - %s %s KW %s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" $mon $sun $year $week $date_mon $date_tue $date_wed $date_thu $date_fri $date_sat $date_sun
@@ -267,34 +269,45 @@ function build_weekly()
       #printf "### Start-Monday=%s\n" $start_Mon
       #printf "### End-Monday=%s\n" $end_Mon
       #printf "--- %s | %s\n" $result $dest_file
-      echo "--- $result | $dest_file"
+      #echo "--- $result | $dest_file_left"
 
       header=$(echo "$mon - $sun")
       kw=$(echo "KW $weeklead")
+
+      echo "--- $result | $kw"
 
       #  -draw "text 710,50 '$year'" \
       convert  \
         -font helvetica \
         -fill black \
         -pointsize 24 \
-        -draw "text 20,40 '$header'" \
-        -draw "text 380,40 '$kw'" \
-        -font FreeMono \
-        -fill black \
-        -pointsize 24  \
-        -draw "text 380, 100 '$(gcal -K --iso-week-number=yes -H no -s 1 ${month} ${year} |tail -n +3)'" \
+        -draw "text 20,36 '$header'" \
+        -draw "text 360,36 '$kw'" \
         -font helvetica \
         -fill black \
         -pointsize 20 \
-        -draw "text 900,300 '$date_mon'" \
-        -draw "text 900,420 '$date_tue'" \
-        -draw "text 900,540 '$date_wed'" \
-        -draw "text 900,660 '$date_thu'" \
-        -draw "text 900,778 '$date_fri'" \
-        -draw "text 900,897 '$date_sat'" \
-        -draw "text 900,1018 '$date_sun'" \
-        $src_file \
-        $dest_file
+        -draw "text 80,232 '$date_mon'" \
+        -draw "text 80,324 '$date_tue'" \
+        -draw "text 80,416 '$date_wed'" \
+        -draw "text 80,508 '$date_thu'" \
+        -draw "text 80,598 '$date_fri'" \
+        -draw "text 80,688 '$date_sat'" \
+        -draw "text 80,780 '$date_sun'" \
+        $src_file_left \
+        $dest_file_left
+
+      convert  \
+        -font helvetica \
+        -fill black \
+        -pointsize 24 \
+        -draw "text 20,36 '$year'" \
+        -draw "text 360,36 '$kw'" \
+        -font FreeMono \
+        -fill black \
+        -pointsize 14  \
+        -draw "text 225, 75 '$(gcal -K --iso-week-number=yes -H no -s 1 ${month} ${year} |tail -n +2)'" \
+        $src_file_right \
+        $dest_file_right
 
       #printf "."
     done
@@ -395,14 +408,14 @@ function clean_build()
 echo "- start building calender planner of $1"
 ## build for Year
 build_yearly_calendar $1 1
-build_quartarly $1 2
-#build_empty_page $1 2
+build_empty_page $1 2
+build_quartarly $1 3
+build_weekly $1 4
 #build_yearly $1 3
 #build_empty_page $1 4
-#build_weekly $1 3
 #build_daily $1 3 12 4
 build_pdf $1
 build_pdf_book $1
-#clean_build
+clean_build
 
 echo "- ...finished"
