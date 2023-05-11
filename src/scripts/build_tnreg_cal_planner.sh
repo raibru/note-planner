@@ -13,6 +13,8 @@ set -o pipefail
 ARGS=("$@")
 
 YEAR_CAL_TEMP=TNRegular-Planner-Yearly
+YEARLY_FIRST_CAL_TEMP=TNRegular-Planner-Yearly-1st
+YEARLY_SECOND_CAL_TEMP=TNRegular-Planner-Yearly-2nd
 EMPTY_CAL_TEMP=TNRegular-Planner-Empty
 QUAT_PLAN_VISION_TEMP=TNRegular-Planner-Quatarly-Vision
 QUAT_PLAN_GOALS_TEMP=TNRegular-Planner-Quatarly-Goals
@@ -38,8 +40,8 @@ function build_empty_page()
     convert  \
       -font helvetica \
       -fill black \
-      -pointsize 20 \
-      -draw "text 40,45 '$header'" \
+      -pointsize 22 \
+      -draw "text 20,36 '$header'" \
       $src_file \
       $dest_file
 
@@ -63,8 +65,8 @@ function build_yearly_calendar()
     convert  \
       -font helvetica \
       -fill black \
-      -pointsize 20 \
-      -draw "text 40,45 '$header'" \
+      -pointsize 22 \
+      -draw "text 20,36 '$header'" \
       -font FreeMono \
       -fill black \
       -pointsize 12  \
@@ -103,13 +105,45 @@ function build_yearly()
     convert  \
       -font helvetica \
       -fill black \
-      -pointsize 20 \
-      -draw "text 40,45 '$header'" \
+      -pointsize 22 \
+      -draw "text 20,36 '$header'" \
       $src_file \
       $dest_file
 
       #gm convert $BUILD_DIR/Planner*.png -density 72 -page a5 $BUILD_DIR/planner-$year.pdf
       #convert $BUILD_DIR/Planner*.png -density 72 -page a5 $BUILD_DIR/planner-$year.pdf
+
+    echo "-- ...done"
+}
+
+function build_yearly_half()
+{
+    local year=$1
+    local page_nr=$2
+
+    echo "-- start building empty page..."
+
+    local header=$(echo "Year $1")
+    local src_file_left=${RES_DIR}/$YEARLY_FIRST_CAL_TEMP.png
+    local dest_file_left=${BUILD_DIR}/Planner-${page_nr}-Yearly-Half_${year}-1.png
+    local src_file_right=${RES_DIR}/$YEARLY_SECOND_CAL_TEMP.png
+    local dest_file_right=${BUILD_DIR}/Planner-${page_nr}-Yearly-Half_${year}-2.png
+
+    convert  \
+      -font helvetica \
+      -fill black \
+      -pointsize 22 \
+      -draw "text 20,36 '$header'" \
+      $src_file_left \
+      $dest_file_left
+
+    convert  \
+      -font helvetica \
+      -fill black \
+      -pointsize 22 \
+      -draw "text 20,36 '$header'" \
+      $src_file_right \
+      $dest_file_right
 
     echo "-- ...done"
 }
@@ -161,8 +195,8 @@ function build_quartarly()
       convert  \
         -font helvetica \
         -fill black \
-        -pointsize 24 \
-        -draw "text 20,40 '$header'" \
+        -pointsize 22 \
+        -draw "text 20,36 '$header'" \
         -pointsize 16 \
         $src_file_left \
         $dest_file_left
@@ -172,12 +206,12 @@ function build_quartarly()
       convert  \
         -font helvetica \
         -fill black \
-        -pointsize 24 \
-        -draw "text 20,40 '$header'" \
+        -pointsize 22 \
+        -draw "text 20,36 '$header'" \
         -pointsize 14 \
-        -draw "text 120,65 '$m1'" \
-        -draw "text 226,65 '$m2'" \
-        -draw "text 334,65 '$m3'" \
+        -draw "text 133,65 '$m1'" \
+        -draw "text 246,65 '$m2'" \
+        -draw "text 360,65 '$m3'" \
         $src_file_right \
         $dest_file_right
 
@@ -281,32 +315,32 @@ function build_weekly()
       convert  \
         -font helvetica \
         -fill black \
-        -pointsize 24 \
+        -pointsize 22 \
         -draw "text 20,36 '$header'" \
         -draw "text 360,36 '$kw'" \
         -font helvetica \
         -fill black \
         -pointsize 20 \
-        -draw "text 80,232 '$date_mon'" \
-        -draw "text 80,324 '$date_tue'" \
-        -draw "text 80,416 '$date_wed'" \
-        -draw "text 80,508 '$date_thu'" \
-        -draw "text 80,598 '$date_fri'" \
-        -draw "text 80,688 '$date_sat'" \
-        -draw "text 80,780 '$date_sun'" \
+        -draw "text 80,234 '$date_mon'" \
+        -draw "text 80,326 '$date_tue'" \
+        -draw "text 80,417 '$date_wed'" \
+        -draw "text 80,511 '$date_thu'" \
+        -draw "text 80,602 '$date_fri'" \
+        -draw "text 80,693 '$date_sat'" \
+        -draw "text 80,785 '$date_sun'" \
         $src_file_left \
         $dest_file_left
 
       convert  \
         -font helvetica \
         -fill black \
-        -pointsize 24 \
+        -pointsize 22 \
         -draw "text 20,36 '$year'" \
         -draw "text 360,36 '$kw'" \
         -font FreeMono \
         -fill black \
         -pointsize 14  \
-        -draw "text 225, 75 '$(gcal -K --iso-week-number=yes -H no -s 1 ${month} ${year} |tail -n +2)'" \
+        -draw "text 245, 75 '$(gcal -K --iso-week-number=yes -H no -s 1 ${month} ${year} |tail -n +2)'" \
         $src_file_right \
         $dest_file_right
 
@@ -352,8 +386,8 @@ function build_daily()
         convert  \
           -font helvetica \
           -fill black \
-          -pointsize 24 \
-          -draw "text 20,50 '$header'" \
+          -pointsize 22 \
+          -draw "text 20,36 '$header'" \
           -font FreeMono \
           -fill black \
           -pointsize 24  \
@@ -409,9 +443,13 @@ function clean_build()
 echo "- start building calender planner of $1"
 ## build for Year
 build_yearly_calendar $1 1
-build_empty_page $1 2
+build_yearly_half $1 2
 build_quartarly $1 3
 build_weekly $1 4
+build_empty_page $1 5
+build_empty_page $1 6
+build_empty_page $1 7
+build_empty_page $1 8
 #build_yearly $1 3
 #build_empty_page $1 4
 #build_daily $1 3 12 4
