@@ -13,6 +13,7 @@ set -o pipefail
 ARGS=("$@")
 
 YEAR_CAL_TEMP=TNRegular-Planner-Yearly
+EMPTY_CAL_TEMP=TNRegular-Planner-Empty
 QUAT_PLAN_VISION_TEMP=TNRegular-Planner-Quatarly-Vision
 QUAT_PLAN_GOALS_TEMP=TNRegular-Planner-Quatarly-Goals
 WEEK_PLAN_DAYS_TEMP=TNRegular-Planner-Weekly-Days
@@ -31,14 +32,14 @@ function build_empty_page()
     echo "-- start building empty page..."
 
     local header=$(echo "Year $1")
-    local src_file=${RES_DIR}/$YEAR_CAL_TEMP.png
-    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Yearly_${year}.png
+    local src_file=${RES_DIR}/$EMPTY_CAL_TEMP.png
+    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Empty_${year}.png
 
     convert  \
       -font helvetica \
       -fill black \
       -pointsize 20 \
-      -draw "text 30,45 '$header'" \
+      -draw "text 40,45 '$header'" \
       $src_file \
       $dest_file
 
