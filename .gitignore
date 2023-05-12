@@ -4,6 +4,7 @@ build
 **/tags
 *.swp
 *.bak
+*.bkp
 *~
 *_dep
 _dep*
