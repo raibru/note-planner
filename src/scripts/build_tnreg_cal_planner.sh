@@ -190,7 +190,7 @@ function build_quartarly()
           ;;
         esac
 
-      echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${dest_file_left}"
+      echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${QUAT_PLAN_VISION_TEMP}"
 
       convert  \
         -font helvetica \
@@ -201,7 +201,7 @@ function build_quartarly()
         $src_file_left \
         $dest_file_left
 
-      echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${dest_file_right}"
+      echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${QUAT_PLAN_GOALS_TEMP}"
 
       convert  \
         -font helvetica \
