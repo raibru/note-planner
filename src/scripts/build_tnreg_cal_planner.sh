@@ -416,6 +416,7 @@ function build_planning_pdf()
   local usefiles=""
   usefiles="$usefiles $(ls $BUILD_DIR/Planner-1-Yearly_*.png)"
   usefiles="$usefiles $(ls $BUILD_DIR/Planner-3-Quartarly_*.png)"
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-*-Empty_*.png)"
 
   echo "-- start building planning PDF..."
   gm convert $usefiles \
@@ -445,6 +446,7 @@ function build_weekly_parts_pdf()
       ord=$(printf "%02d" $j)
       usefiles="$usefiles $(ls $BUILD_DIR/Planner-4-$ord-Weekly_*.png)"
     done
+    usefiles="$usefiles $(ls $BUILD_DIR/Planner-*-Empty_*.png)"
     echo "--- build part: $i"
     echo "--- start week count: $startPart"
     echo "--- end week count:   $endPart"
