@@ -361,6 +361,66 @@ function build_pdf()
   echo "-- ...done"
 }
 
+function build_yearly_pdf()
+{
+  local year=$1
+  local usefiles=""
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-1-Yearly_*.png)"
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-2-Yearly_*.png)"
+
+  echo "-- start building PDF..."
+  #convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  #        -density 72 \
+  #        -page a5 \
+  #        $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
+  #gm convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  gm convert $usefiles \
+             -density 72 \
+             -page a5 \
+             $BUILD_DIR/onenote-planner-yearly-$year.pdf
+  echo "-- ...done"
+}
+
+function build_quatarly_pdf()
+{
+  local year=$1
+  local usefiles=""
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-1-Yearly_*.png)"
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-3-Quartarly_*.png)"
+
+  echo "-- start building PDF..."
+  #convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  #        -density 72 \
+  #        -page a5 \
+  #        $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
+  #gm convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  gm convert $usefiles \
+             -density 72 \
+             -page a5 \
+             $BUILD_DIR/onenote-planner-quatarly-$year.pdf
+  echo "-- ...done"
+}
+
+function build_weekly_pdf()
+{
+  local year=$1
+  local usefiles=""
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-1-Yearly_*.png)"
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-4-*-Weekly_*.png)"
+
+  echo "-- start building PDF..."
+  #convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  #        -density 72 \
+  #        -page a5 \
+  #        $BUILD_DIR/tn-regular-planner-weekly-$year.pdf
+  #gm convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
+  gm convert $usefiles \
+             -density 72 \
+             -page a5 \
+             $BUILD_DIR/onenote-planner-weekly-$year.pdf
+  echo "-- ...done"
+}
+
 function build_pdf_book()
 {
   local year=$1
@@ -388,6 +448,9 @@ build_yearly $1 2
 build_quartarly $1 3
 build_weekly $1 4
 build_pdf $1
+build_yearly_pdf $1
+build_quatarly_pdf $1
+build_weekly_pdf $1
 clean_build
 
 echo "- ...finished"
