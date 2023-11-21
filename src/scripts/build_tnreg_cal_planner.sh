@@ -25,6 +25,7 @@ PLAN_TEMP_PATTERN=Planner-*.png
 RES_DIR=../res
 BUILD_DIR=../../build/build_tnreg_planner
 
+WEEK_COUNT=52 # ueberschrieben in build weekly
 
 function build_empty_page()
 {
@@ -266,7 +267,8 @@ function build_weekly()
     echo "--- Start-Week=$week_num_of_Jan_1"
     echo "--- End-Monday=$end_Mon"
     echo "--- End-Week=$week_num_of_Dec_31"
-    week=$week_num_of_Jan_1
+    isoweek=$week_num_of_Jan_1
+    isoyear=$(date -d $start_Mon +%G)
 
     file_cnt=0
 
@@ -287,9 +289,10 @@ function build_weekly()
       date_sat=$(date -d "$start_Mon + 5 day" "$date_small_fmt")
       date_sun=$(date -d "$start_Mon + 6 day" "$date_small_fmt")
 
-      result=$(echo "$mon - $sun;KW $week;$date_mon;$date_tue;$date_wed;$date_thu;$date_fri;$date_sat;$date_sun;$weeklead;$month")
+      result=$(echo "$mon - $sun;$isoyear;KW$isoweek;$date_mon;$date_tue;$date_wed;$date_thu;$date_fri;$date_sat;$date_sun;$weeklead;$month")
       start_Mon=$(date -d "$start_Mon + 7 day" +%F)
-      week=$(date -d $start_Mon +%V)
+      isoweek=$(date -d $start_Mon +%V)
+      isoyear=$(date -d $start_Mon +%G)
 
       file_cnt=$((file_cnt + 1 ))
       ord=$(printf "%02d" $file_cnt)
@@ -299,7 +302,7 @@ function build_weekly()
       local dest_file_right=${BUILD_DIR}/Planner-${page_nr}-${ord}-Weekly_${year}_${weeklead}_2.png
       local month_print=${BUILD_DIR}/month_print.tmp
 
-      #printf "%s - %s %s KW %s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" $mon $sun $year $week $date_mon $date_tue $date_wed $date_thu $date_fri $date_sat $date_sun
+      #printf "%s - %s %s KW %s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" $mon $sun $isoyear $isoweek $date_mon $date_tue $date_wed $date_thu $date_fri $date_sat $date_sun
       #echo "\"$mon\" - \"$sun\""
       #printf "### Start-Monday=%s\n" $start_Mon
       #printf "### End-Monday=%s\n" $end_Mon
@@ -309,7 +312,7 @@ function build_weekly()
       header=$(echo "$mon - $sun")
       kw=$(echo "KW $weeklead")
 
-      echo "--- $result | $kw"
+      echo "--- $ord | $result | $kw"
 
       #  -draw "text 710,50 '$year'" \
       convert  \
@@ -335,7 +338,7 @@ function build_weekly()
         -font helvetica \
         -fill black \
         -pointsize 22 \
-        -draw "text 20,36 '$year'" \
+        -draw "text 20,36 '$isoyear'" \
         -draw "text 360,36 '$kw'" \
         -font FreeMono \
         -fill black \
@@ -346,6 +349,9 @@ function build_weekly()
 
       #printf "."
     done
+
+    WEEK_COUNT=$file_cnt
+    echo "--- Week Count: $WEEK_COUNT"
 
     echo "-- ...done"
 }
@@ -404,6 +410,53 @@ function build_daily()
     echo "-- ...done"
 }
 
+function build_planning_pdf()
+{
+  local year=$1
+  local usefiles=""
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-1-Yearly_*.png)"
+  usefiles="$usefiles $(ls $BUILD_DIR/Planner-3-Quartarly_*.png)"
+
+  echo "-- start building planning PDF..."
+  gm convert $usefiles \
+             -density 72 \
+             -page a5 \
+             $BUILD_DIR/planner-planning-$year.pdf
+  echo "-- ...done"
+}
+
+function build_weekly_parts_pdf()
+{
+  local year=$1
+  local parts=$2
+  local startPart=0
+  local endPart=0
+  local usefiles=""
+
+  echo "-- start building weekly PDF..."
+  for i in $(seq 1 $parts)
+  do
+    startPart=$(expr $endPart + 1)
+    endPart=$(expr $WEEK_COUNT / $parts + $startPart - $endPart % 2)
+    usefiles=""
+    usefiles="$usefiles $(ls $BUILD_DIR/Planner-1-Yearly_*.png)"
+    for j in $(seq $startPart $endPart)
+    do
+      ord=$(printf "%02d" $j)
+      usefiles="$usefiles $(ls $BUILD_DIR/Planner-4-$ord-Weekly_*.png)"
+    done
+    echo "--- build part: $i"
+    echo "--- start week count: $startPart"
+    echo "--- end week count:   $endPart"
+
+    gm convert $usefiles \
+              -density 72 \
+              -page a5 \
+              $BUILD_DIR/planner-weekly-$i-$year.pdf
+  done
+  echo "-- ...done"
+}
+
 function build_pdf()
 {
   local year=$1
@@ -416,7 +469,7 @@ function build_pdf()
   gm convert $BUILD_DIR/$PLAN_TEMP_PATTERN \
              -density 72 \
              -page a5 \
-             $BUILD_DIR/planner-$year.pdf
+             $BUILD_DIR/planner-full-$year.pdf
   echo "-- ...done"
 }
 
@@ -455,6 +508,8 @@ build_empty_page $1 8
 #build_daily $1 3 12 4
 build_pdf $1
 build_pdf_book $1
+build_planning_pdf $1
+build_weekly_parts_pdf $1 2
 clean_build
 
 echo "- ...finished"
