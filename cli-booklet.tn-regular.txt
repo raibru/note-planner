@@ -33,3 +33,6 @@ pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' 
 pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --booklet true --delta '10mm 0mm' --suffix booklet planner-weekly-2021.pdf
 pdfjam --landscape --signature 8 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig8 planner-weekly-2021.pdf
 pdfjam --landscape --signature 16 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig16 planner-weekly-2021.pdf
+
+
+pdfjam --landscape --signature 16 --a4paper --nup 2x1 --papersize '{10cm,13,7cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig16 planner-full-2025.pdf
