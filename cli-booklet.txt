@@ -6,3 +6,16 @@ pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' 
 pdfjam --landscape --signature 56 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --booklet true --delta '10mm 0mm' --suffix booklet planner-weekly-2021.pdf
 pdfjam --landscape --signature 8 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig8 planner-weekly-2021.pdf
 pdfjam --landscape --signature 16 --a4paper --nup 2x1 --papersize '{13cm,21cm}' --scale 0.98 --delta '10mm 0mm' --suffix booklet-sig16 planner-weekly-2021.pdf
+
+pdfjam --a4paper --nup 2x2 --scale 0.85 --delta '2mm 10mm' --suffix booklet planner-full-2025.pdf
+pdfjam --a4paper --nup 2x2 --scale 0.85 --delta '0mm 10mm' --outfile planner-full-booklet-od-2025.pdf planner-full-2025.pdf "1,3,5,7"
+
+
+---
+2025-03-10 rbr
+Print Travelnote Passport size 2025
+Print 1st part 2x2 of Booklet PDF
+pdfjam --a4paper --nup 2x2 --scale 0.85 --delta '0mm 10mm' --outfile planner-full-booklet-1st-2025.pdf planner-full-2025.pdf "16,17,14,19,12,21,10,23,8,25,6,27,4,29,2,31" 
+Print 2nd part 2x2 of Booklet PDF
+pdfjam --a4paper --nup 2x2 --scale 0.85 --delta '0mm 10mm' --outfile planner-full-booklet-2nd-2025.pdf planner-full-2025.pdf "30,3,32,1,26,7,28,5,22,11,24,9,18,15,20,13"
+---
