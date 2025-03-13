@@ -24,6 +24,7 @@ EMPTY_CAL_TEMP=TNPassport-Planner-Empty
 PLAN_TEMP_PATTERN=Planner-*.png
 RES_DIR=../res
 BUILD_DIR=../../build/build_tnpassport_calendar
+ARTIFACTS_DIR=../../artifacts/TN-Passport.Monthly-Booklet
 
 WEEK_COUNT=52 # ueberschrieben in build weekly
 
@@ -459,6 +460,41 @@ function clean_build()
   echo "-- ...done"
 }
 
+function build_pdf_booklet()
+{
+  local year=$1
+
+  echo "-- start building PDF booklet..."
+  echo "-- -- 1st..."
+  pdfjam --a4paper \
+         --nup 2x2 \
+         --scale 0.85 \
+         --trim '-4mm -14mm -4mm -14mm' \
+         --frame true \
+         --outfile $BUILD_DIR/planner-full-booklet-1st-$year.pdf \
+         $BUILD_DIR/planner-full-$year.pdf "16,17,14,19,12,21,10,23,8,25,6,27,4,29,2,31"
+  echo "-- -- 2nd..."
+  pdfjam --a4paper \
+         --nup 2x2 \
+         --scale 0.85 \
+         --trim '-4mm -14mm -4mm -14mm' \
+         --frame true \
+         --outfile $BUILD_DIR/planner-full-booklet-2nd-$year.pdf \
+         $BUILD_DIR/planner-full-$year.pdf "30,3,32,1,26,7,28,5,22,11,24,9,18,15,20,13"         
+  echo "-- ...done"
+}
+
+function publish_pdf_booklet()
+{
+  local year=$1
+
+  echo "-- publish PDF booklet..."
+  cp -v $BUILD_DIR/*$year.pdf $ARTIFACTS_DIR/
+  echo "-- ...done"
+}
+
+
+
 echo "- start building calender planner of $1"
 ## build for Year
 build_empty_page $1 1
@@ -472,9 +508,8 @@ build_empty_page $1 7
 build_empty_page $1 8
 build_empty_page $1 9
 build_pdf $1
-build_pdf_book $1
-#build_planning_pdf $1
-#build_weekly_parts_pdf $1 2
+build_pdf_booklet $1
+publish_pdf_booklet $1
 clean_build
 
 echo "- ...finished"
