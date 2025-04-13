@@ -12,10 +12,13 @@ set -o pipefail
 
 ARGS=("$@")
 
-YEAR_CAL_MONTH_TEMP=Boox-Planner-Yearly
-YEAR_CAL_OVERVIEW_TEMP=Boox-Planner-Yearly
-QUAT_PLAN_GOALS_TEMP=Boox-Planner-Quatarly
+YEAR_MONTH_TEMP=Boox-Planner-Empty
+YEAR_OVERVIEW_TEMP=Boox-Planner-Yearly
+QUAT_PLAN_GOALS_TEMP=Boox-Planner-Quartarly
 MONTH_CAL_TEMP=Boox-Planner-Monthly-6
+WEEK_OVERVIEW_HORIZ=Boox-Planner-Weekly-Lane-Horiz
+WEEK_OVERVIEW_VERT=Boox-Planner-Weekly-Lane-Vert
+WEEK_OVERVIEW_BLOCK=Boox-Planner-Weekly-Block
 PLAN_TEMP_PATTERN=Planner-*.png
 RES_DIR=../res
 BUILD_DIR=../../build/build_boox_calendar
@@ -30,30 +33,30 @@ function build_yearly_month()
 
     echo "-- start building yearly planning page..."
 
-    local header=$(echo "Year $1")
-    local src_file=${RES_DIR}/$YEAR_PLAN_TEMP.png
-    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Yearly_${year}.png
+    local header=$(echo "$1")
+    local src_file=${RES_DIR}/$YEAR_MONTH_TEMP.png
+    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Yearly_Month_${year}.png
 
     convert  \
       -font helvetica \
       -fill black \
-      -pointsize 22 \
-      -draw "text 20,28 '$header'" \
+      -pointsize 26 \
+      -draw "text 30,45 '$header'" \
       -font FreeMono \
       -fill black \
-      -pointsize 12  \
-      -draw "text 10, 70  '$(gcal -K --iso-week-number=yes -H no -s 1 1 ${year})'" \
-      -draw "text 10, 200  '$(gcal -K --iso-week-number=yes -H no -s 1 2 ${year})'" \
-      -draw "text 10, 330  '$(gcal -K --iso-week-number=yes -H no -s 1 3 ${year})'" \
-      -draw "text 200, 70  '$(gcal -K --iso-week-number=yes -H no -s 1 4 ${year})'" \
-      -draw "text 200, 200  '$(gcal -K --iso-week-number=yes -H no -s 1 5 ${year})'" \
-      -draw "text 200, 330  '$(gcal -K --iso-week-number=yes -H no -s 1 6 ${year})'" \
-      -draw "text 10, 70 '$(gcal -K --iso-week-number=yes -H no -s 1 7 ${year})'" \
-      -draw "text 10, 200 '$(gcal -K --iso-week-number=yes -H no -s 1 8 ${year})'" \
-      -draw "text 10, 330 '$(gcal -K --iso-week-number=yes -H no -s 1 9 ${year})'" \
-      -draw "text 200, 70 '$(gcal -K --iso-week-number=yes -H no -s 1 10 ${year})'" \
-      -draw "text 200, 200 '$(gcal -K --iso-week-number=yes -H no -s 1 11 ${year})'" \
-      -draw "text 200, 330 '$(gcal -K --iso-week-number=yes -H no -s 1 12 ${year})'" \
+      -pointsize 18  \
+      -draw "text 70, 100  '$(gcal -K --iso-week-number=yes -H no -s 1 1 ${year})'" \
+      -draw "text 70, 270  '$(gcal -K --iso-week-number=yes -H no -s 1 3 ${year})'" \
+      -draw "text 70, 440  '$(gcal -K --iso-week-number=yes -H no -s 1 5 ${year})'" \
+      -draw "text 70, 610 '$(gcal -K --iso-week-number=yes -H no -s 1 7 ${year})'" \
+      -draw "text 70, 780 '$(gcal -K --iso-week-number=yes -H no -s 1 9 ${year})'" \
+      -draw "text 70, 950 '$(gcal -K --iso-week-number=yes -H no -s 1 11 ${year})'" \
+      -draw "text 450, 100  '$(gcal -K --iso-week-number=yes -H no -s 1 2 ${year})'" \
+      -draw "text 450, 270  '$(gcal -K --iso-week-number=yes -H no -s 1 4 ${year})'" \
+      -draw "text 450, 440  '$(gcal -K --iso-week-number=yes -H no -s 1 6 ${year})'" \
+      -draw "text 450, 610 '$(gcal -K --iso-week-number=yes -H no -s 1 8 ${year})'" \
+      -draw "text 450, 780 '$(gcal -K --iso-week-number=yes -H no -s 1 10 ${year})'" \
+      -draw "text 450, 950 '$(gcal -K --iso-week-number=yes -H no -s 1 12 ${year})'" \
       $src_file \
       $dest_file
 
@@ -65,17 +68,17 @@ function build_yearly_overview()
     local year=$1
     local page_nr=$2
 
-    echo "-- start building yearly first page..."
+    echo "-- start building yearly overview page..."
 
-    local header=$(echo "Year $1")
-    local src_file=${RES_DIR}/$YEAR_FIRST_CAL_TEMP.png
-    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Yearly_${year}.png
+    local header=$(echo "$1")
+    local src_file=${RES_DIR}/$YEAR_OVERVIEW_TEMP.png
+    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Yearly_Overview_${year}.png
 
     convert  \
       -font helvetica \
       -fill black \
       -pointsize 22 \
-      -draw "text 20,28 '$header'" \
+      -draw "text 30,45 '$header'" \
       -font FreeMono \
       -fill black \
       -pointsize 12  \
@@ -98,8 +101,8 @@ function build_quartarly_plan_goal()
     for i in $(seq 1 4)
     do
       local header=$(echo "Year $year / Q$i")
-      local src_file_left=${RES_DIR}/$QUAT_PLAN_VISION_TEMP.png
-      local dest_file_left=${BUILD_DIR}/Planner-${page_nr}-Quartarly_${year}.${i}-1.png
+      # local src_file_left=${RES_DIR}/$QUAT_PLAN_VISION_TEMP.png
+      # local dest_file_left=${BUILD_DIR}/Planner-${page_nr}-Quartarly_${year}.${i}-1.png
       local src_file_right=${RES_DIR}/$QUAT_PLAN_GOALS_TEMP.png
       local dest_file_right=${BUILD_DIR}/Planner-${page_nr}-Quartarly_${year}.${i}-2.png
 
@@ -130,16 +133,16 @@ function build_quartarly_plan_goal()
           ;;
         esac
 
-      echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${QUAT_PLAN_VISION_TEMP}"
+      # echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${QUAT_PLAN_VISION_TEMP}"
 
-      convert  \
-        -font helvetica \
-        -fill black \
-        -pointsize 22 \
-        -draw "text 20,36 '$header'" \
-        -pointsize 16 \
-        $src_file_left \
-        $dest_file_left
+      # convert  \
+      #   -font helvetica \
+      #   -fill black \
+      #   -pointsize 22 \
+      #   -draw "text 20,36 '$header'" \
+      #   -pointsize 16 \
+      #   $src_file_left \
+      #   $dest_file_left
 
       echo "--- ...Q${i} | ${m1} | ${m2} | ${m3} | ${QUAT_PLAN_GOALS_TEMP}"
 
@@ -147,11 +150,11 @@ function build_quartarly_plan_goal()
         -font helvetica \
         -fill black \
         -pointsize 22 \
-        -draw "text 20,36 '$header'" \
+        -draw "text 30,45 '$header'" \
         -pointsize 14 \
-        -draw "text 133,65 '$m1'" \
-        -draw "text 246,65 '$m2'" \
-        -draw "text 360,65 '$m3'" \
+        -draw "text 300,100 '$m1'" \
+        -draw "text 490,100 '$m2'" \
+        -draw "text 690,100 '$m3'" \
         $src_file_right \
         $dest_file_right
 
@@ -168,16 +171,15 @@ function build_monthly()
 
     echo "-- start building monthly calendar page..."
 
-    local src_file_1st=${RES_DIR}/$MONTH_FIRST_CAL_TEMP.png
-    local src_file_2nd=${RES_DIR}/$MONTH_SECOND_CAL_TEMP.png
+    local src_file=${RES_DIR}/$MONTH_CAL_TEMP.png
 
     for mon in $(seq 1 12)
     do
 
-      #local monDays=("--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--")
-       local monDays=("  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  ")
-      #local monWeekNums=("--" "--" "--" "--" "--" "--")
-       local monWeekNums=("  " "  " "  " "  " "  " "  ")
+      # local monDays=("--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--" "--")
+      # local monWeekNums=("--" "--" "--" "--" "--" "--")
+      local monDays=("  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  " "  ")
+      local monWeekNums=("  " "  " "  " "  " "  " "  ")
 
       local fdayIdx=1
       local ldayIdx=$(date -d "$year-$mon-$fdayIdx +1 month -1 day" '+%d')
@@ -235,85 +237,126 @@ function build_monthly()
       
       #echo "---------------------------------------------"
 
-      local dest_file_1st=${BUILD_DIR}/Planner-${page_nr}-${monNum}-Monthly_1st_${year}.png
-      local dest_file_2nd=${BUILD_DIR}/Planner-${page_nr}-${monNum}-Monthly_2nd_${year}.png
+      local dest_file=${BUILD_DIR}/Planner-${page_nr}-${monNum}-Monthly_${year}.png
+      local header=$(echo "$monName / $year")
 
       convert  \
         -font helvetica \
         -fill black \
         -pointsize 22 \
-        -draw "text 20,28 '$monName'" \
-        -font helvetica \
-        -fill black \
-        -pointsize 12 \
-        -draw "text 21,75 '${monWeekNums[0]}'" \
-        -draw "text 21,149 '${monWeekNums[1]}'" \
-        -draw "text 21,223 '${monWeekNums[2]}'" \
-        -draw "text 21,297 '${monWeekNums[3]}'" \
-        -draw "text 21,371 '${monWeekNums[4]}'" \
-        -draw "text 21,445 '${monWeekNums[5]}'" \
+        -draw "text 30,45 '$header'" \
         -font helvetica \
         -fill black \
         -pointsize 16 \
-        -draw "text 47,75 '${monDays[0]}'" \
-        -draw "text 114,75 '${monDays[1]}'" \
-        -draw "text 182,75 '${monDays[2]}'" \
-        -draw "text 248,75 '${monDays[3]}'" \
-        -draw "text 317,75 '${monDays[4]}'" \
-        -draw "text 47,149 '${monDays[7]}'" \
-        -draw "text 114,149 '${monDays[8]}'" \
-        -draw "text 182,149 '${monDays[9]}'" \
-        -draw "text 248,149 '${monDays[10]}'" \
-        -draw "text 317,149 '${monDays[11]}'" \
-        -draw "text 47,223 '${monDays[14]}'" \
-        -draw "text 114,223 '${monDays[15]}'" \
-        -draw "text 182,223 '${monDays[16]}'" \
-        -draw "text 248,223 '${monDays[17]}'" \
-        -draw "text 317,223 '${monDays[18]}'" \
-        -draw "text 47,297'${monDays[21]}'" \
-        -draw "text 114,297 '${monDays[22]}'" \
-        -draw "text 182,297 '${monDays[23]}'" \
-        -draw "text 248,297 '${monDays[24]}'" \
-        -draw "text 317,297 '${monDays[25]}'" \
-        -draw "text 47,371 '${monDays[28]}'" \
-        -draw "text 114,371 '${monDays[29]}'" \
-        -draw "text 182,371 '${monDays[30]}'" \
-        -draw "text 248,371 '${monDays[31]}'" \
-        -draw "text 317,371 '${monDays[32]}'" \
-        -draw "text 47,445 '${monDays[35]}'" \
-        -draw "text 114,445 '${monDays[36]}'" \
-        -draw "text 182,445 '${monDays[37]}'" \
-        -draw "text 248,445 '${monDays[38]}'" \
-        -draw "text 317,445 '${monDays[39]}'" \
-        $src_file_1st \
-        $dest_file_1st
-
-      convert  \
+        -draw "text 50,150 '${monWeekNums[0]}'" \
+        -draw "text 50,320 '${monWeekNums[1]}'" \
+        -draw "text 50,485 '${monWeekNums[2]}'" \
+        -draw "text 50,655 '${monWeekNums[3]}'" \
+        -draw "text 50,820 '${monWeekNums[4]}'" \
+        -draw "text 50,985 '${monWeekNums[5]}'" \
         -font helvetica \
         -fill black \
-        -pointsize 22 \
-        -draw "text 20,28 '$monName'" \
-        -draw "text 330,28 '$year'" \
-        -font helvetica \
-        -fill black \
-        -pointsize 16 \
-        -draw "text 21,75 '${monDays[5]}'" \
-        -draw "text 88,75 '${monDays[6]}'" \
-        -draw "text 21,149 '${monDays[12]}'" \
-        -draw "text 88,149 '${monDays[13]}'" \
-        -draw "text 21,223 '${monDays[19]}'" \
-        -draw "text 88,223 '${monDays[20]}'" \
-        -draw "text 21,297 '${monDays[26]}'" \
-        -draw "text 88,297 '${monDays[27]}'" \
-        -draw "text 21,371 '${monDays[33]}'" \
-        -draw "text 88,371 '${monDays[34]}'" \
-        -draw "text 21,445 '${monDays[40]}'" \
-        -draw "text 88,445 '${monDays[41]}'" \
-        $src_file_2nd \
-        $dest_file_2nd
-
+        -pointsize 20 \
+        -draw "text 95,150 '${monDays[0]}'" \
+        -draw "text 197,150 '${monDays[1]}'" \
+        -draw "text 299,150 '${monDays[2]}'" \
+        -draw "text 402,150 '${monDays[3]}'" \
+        -draw "text 504,150 '${monDays[4]}'" \
+        -draw "text 607,150 '${monDays[5]}'" \
+        -draw "text 709,150 '${monDays[6]}'" \
+        -draw "text 95,320 '${monDays[7]}'" \
+        -draw "text 197,320 '${monDays[8]}'" \
+        -draw "text 299,320 '${monDays[9]}'" \
+        -draw "text 402,320 '${monDays[10]}'" \
+        -draw "text 504,320 '${monDays[11]}'" \
+        -draw "text 607,320 '${monDays[12]}'" \
+        -draw "text 709,320 '${monDays[13]}'" \
+        -draw "text 95,485 '${monDays[14]}'" \
+        -draw "text 197,485 '${monDays[15]}'" \
+        -draw "text 299,485 '${monDays[16]}'" \
+        -draw "text 402,485 '${monDays[17]}'" \
+        -draw "text 504,485 '${monDays[18]}'" \
+        -draw "text 607,485 '${monDays[19]}'" \
+        -draw "text 709,485 '${monDays[20]}'" \
+        -draw "text 95,655'${monDays[21]}'" \
+        -draw "text 197,655 '${monDays[22]}'" \
+        -draw "text 299,655 '${monDays[23]}'" \
+        -draw "text 402,655 '${monDays[24]}'" \
+        -draw "text 504,655 '${monDays[25]}'" \
+        -draw "text 607,655 '${monDays[26]}'" \
+        -draw "text 709,655 '${monDays[27]}'" \
+        -draw "text 95,820 '${monDays[28]}'" \
+        -draw "text 197,820 '${monDays[29]}'" \
+        -draw "text 299,820 '${monDays[30]}'" \
+        -draw "text 402,820 '${monDays[31]}'" \
+        -draw "text 504,820 '${monDays[32]}'" \
+        -draw "text 607,820 '${monDays[33]}'" \
+        -draw "text 709,820 '${monDays[34]}'" \
+        -draw "text 95,985 '${monDays[35]}'" \
+        -draw "text 197,985 '${monDays[36]}'" \
+        -draw "text 299,985 '${monDays[37]}'" \
+        -draw "text 402,985 '${monDays[38]}'" \
+        -draw "text 504,985 '${monDays[39]}'" \
+        -draw "text 607,985 '${monDays[40]}'" \
+        -draw "text 709,985 '${monDays[41]}'" \
+        $src_file \
+        $dest_file
    
     done
+
+    echo "-- ...done"
+}
+
+function build_weekly_overview()
+{
+    local year=$1
+    local page_nr=$2
+
+    echo "-- start building weekly overview page..."
+
+    local header=$(echo "$1 - KW")
+    
+    local src_file=${RES_DIR}/$WEEK_OVERVIEW_HORIZ.png
+    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Weekly_Overview_Horiz_${year}.png
+
+    convert  \
+      -font helvetica \
+      -fill black \
+      -pointsize 22 \
+      -draw "text 30,45 '$header'" \
+      -font FreeMono \
+      -fill black \
+      -pointsize 12  \
+      $src_file \
+      $dest_file
+
+    local src_file=${RES_DIR}/$WEEK_OVERVIEW_VERT.png
+    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Weekly_Overview_Vert_${year}.png
+
+    convert  \
+      -font helvetica \
+      -fill black \
+      -pointsize 22 \
+      -draw "text 30,45 '$header'" \
+      -font FreeMono \
+      -fill black \
+      -pointsize 12  \
+      $src_file \
+      $dest_file
+
+    local src_file=${RES_DIR}/$WEEK_OVERVIEW_BLOCK.png
+    local dest_file=${BUILD_DIR}/Planner-${page_nr}-Weekly_Overview_Block_${year}.png
+
+    convert  \
+      -font helvetica \
+      -fill black \
+      -pointsize 22 \
+      -draw "text 30,45 '$header'" \
+      -font FreeMono \
+      -fill black \
+      -pointsize 12  \
+      $src_file \
+      $dest_file
 
     echo "-- ...done"
 }
@@ -367,6 +410,7 @@ function clean_build()
 {
   echo "-- start cleaning build dir..."
   rm $BUILD_DIR/*.png
+  rm $BUILD_DIR/*.pdf
   echo "-- ...done"
 }
 
@@ -410,7 +454,8 @@ echo "- start building calender planner of $1"
 build_yearly_month $1 2
 build_yearly_overview $1 3
 build_quartarly_plan_goal $1 4
-build_monthly $1 4
+build_monthly $1 5
+build_weekly_overview $1 6
 build_pdf $1
 publish_pdf_book $1
 clean_build
