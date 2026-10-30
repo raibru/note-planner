@@ -85,24 +85,24 @@ function build_quartarly_plan_goal()
 
       case $i in
         1 )
-          m1="January"
-          m2="February"
-          m3="March"
+          m1="Januar"
+          m2="Februar"
+          m3="März"
           ;;
         2 )
           m1="April"
-          m2="May"
-          m3="June"
+          m2="Mai"
+          m3="Juni"
           ;;
         3 )
-          m1="July"
+          m1="Juli"
           m2="August"
           m3="September"
           ;;
         4 )
-          m1="October"
+          m1="Oktober"
           m2="November"
-          m3="December"
+          m3="Dezember"
           ;;
         esac
 
